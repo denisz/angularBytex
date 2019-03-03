@@ -1,0 +1,96 @@
+<div *ngIf="loading" class="loading">
+    <span class="spinner spinner-inline">
+        Loading...
+    </span>
+    <span>&nbsp;
+        {{'Loading' | translate}}...
+    </span>
+</div>
+
+<div class="clr-row" *ngIf="!loading">
+    <div class="clr-col-lg-6 clr-col-12">
+        <div class="card">
+            <div class="card-header">
+                {{work.title}}
+            </div>
+            <div class="card-block">
+                <div class="card-media-block">
+                    <a [routerLink]="['/book']"
+                       [queryParams]="{id: work.key | getolid}"
+                       routerLinkActive="active" class="bookcover">
+                        <img
+                                class="card-media-image"
+                                [src]="work.key | getolid | olcoverurl:L"
+                                alt="{{work.title}}">
+                    </a>
+                    <div class="card-media-description">
+                        <span class="card-media-text">
+                            <h5>{{'Published' | translate}}:</h5>
+                            <span>{{work.firstPublishDate}}</span>
+                        </span>
+                        <span class="card-media-text">
+                            <h5>{{'Subjects' | translate}}:</h5>
+                            <app-read-more
+                                    text="{{(work.subjects || []).join(', ')}}"
+                                    [maxLength]="100"></app-read-more>
+                        </span>
+                        <span>
+                            <h5>{{'SubjectPeople' | translate}}:</h5>
+                            <app-read-more
+                                    text="{{(work.subjectPeople || []).join(', ')}}"
+                                    [maxLength]="100"></app-read-more>
+
+                        </span>
+                    </div>
+                </div>
+                <h4>{{'Description' | translate}}:</h4>
+                <div class="card-text">
+                    {{work.description | getText}}
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <span *ngIf="(work.links || []).length > 0">
+                    <h4>{{'Links' | translate}}:</h4>
+                    <div *ngFor="let link of work.links">
+                        <a target="_blank" href="{{link.url}}">{{link.title}}</a>
+                    </div>
+                </span>
+
+                <span *ngIf="(work.excerpts || []).length > 0">
+                    <h4>{{'Excerpts' | translate}}:</h4>
+                    <div *ngFor="let excerpt of work.excerpts">
+                        <i>{{excerpt.excerpt}}</i>
+                    </div>
+                </span>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="clr-col-lg-6 clr-col-12">
+        <div class="card">
+            <div class="card-block">
+                <h4>{{'Tags' | translate}}</h4>
+                <mat-form-field class="chip-list">
+                    <mat-chip-list #chipList>
+                        <mat-chip *ngFor="let tag of localEntry.tags$ | async"
+                                  [selectable]="true"
+                                  [removable]="true"
+                                  (removed)="remove(tag)">
+                            {{tag}}
+                            <mat-icon matChipRemove>{{"cancel" | translate}}</mat-icon>
+                        </mat-chip>
+
+                        <input
+                                [placeholder]="'New tag' | translate"
+                                [matChipInputFor]="chipList"
+                                (matChipInputTokenEnd)="add($event)"
+                                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                        >
+                    </mat-chip-list>
+                </mat-form-field>
+            </div>
+        </div>
+    </div>
+</div>

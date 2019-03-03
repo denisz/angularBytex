@@ -1,0 +1,78 @@
+<div *ngIf="initloading" class="loading">
+        <span class="spinner spinner-inline">
+            Loading...
+        </span>
+    <span>&nbsp;
+            {{'Loading' | translate}}...
+        </span>
+</div>
+
+<div class="fav-wrapper" *ngIf="!initloading">
+    <mat-form-field>
+        <mat-select [formControl]="selectedTags" multiple>
+            <mat-option *ngFor="let t of tags$ | async" [value]="t">{{t}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <clr-datagrid [clrDgLoading]="loading">
+        <clr-dg-placeholder>We couldn't find any books!</clr-dg-placeholder>
+
+        <clr-dg-column>
+            <ng-container>
+                {{ 'Thumbnail' | translate }}
+            </ng-container>
+        </clr-dg-column>
+
+        <clr-dg-column>
+            <ng-container *clrDgHideableColumn="{hidden: false}">
+                {{ 'Title' | translate }}
+            </ng-container>
+        </clr-dg-column>
+
+        <clr-dg-column>
+            <ng-container *clrDgHideableColumn="{hidden: false}">
+                {{ 'Subjects' | translate }}
+            </ng-container>
+        </clr-dg-column>
+
+        <clr-dg-column>
+            <ng-container *clrDgHideableColumn="{hidden: false}">
+                {{ 'Tags' | translate }}
+            </ng-container>
+        </clr-dg-column>
+
+
+        <clr-dg-row *clrDgItems="let entry of entries$ | async" [clrDgItem]="entry">
+            <clr-dg-cell class="searchResultItem">
+                <a [routerLink]="['/book']" [queryParams]="{id: entry.key | getolid}" routerLinkActive="active" class="bookcover">
+                    <img [src]="entry.key | getolid | olcoverurl" alt="{{entry.title}}">
+                </a>
+            </clr-dg-cell>
+
+            <clr-dg-cell>{{entry.title}}</clr-dg-cell>
+
+            <clr-dg-cell>
+                <app-read-more
+                        text="{{(entry.subjects || []).join(',')}}"
+                        [maxLength]="100"></app-read-more>
+
+            </clr-dg-cell>
+
+            <clr-dg-cell>
+                <app-read-more
+                        text="{{(entry.tags || []).join(',')}}"
+                        [maxLength]="100"></app-read-more>
+            </clr-dg-cell>
+        </clr-dg-row>
+
+        <clr-dg-footer>
+            <!-- Optional customization of hide/show columns toggle -->
+            <clr-dg-column-toggle>
+                <clr-dg-column-toggle-title>{{ 'Columns' | translate }}</clr-dg-column-toggle-title>
+                <clr-dg-column-toggle-button>{{ 'All' | translate }}</clr-dg-column-toggle-button>
+            </clr-dg-column-toggle>
+        </clr-dg-footer>
+    </clr-datagrid>
+</div>
+
+

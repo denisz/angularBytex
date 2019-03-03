@@ -1,0 +1,103 @@
+<div class="home-wrapper">
+    <form clrForm autocomplete="off" (keyup)="submitFormIfNeeded($event)">
+        <clr-input-container>
+            <label for="title">{{ 'Search' | translate }}</label>
+            <input clrInput
+                   id="title"
+                   name="title"
+                   placeholder="{{'Search.placeholder' | translate}}"
+                   [formControl]="titleControl">
+        </clr-input-container>
+
+        <clr-input-container>
+            <label for="subjects">{{ 'Subjects' | translate }}</label>
+            <input clrInput
+                   id="subjects"
+                   name="subjects"
+                   placeholder="{{'Subjects.placeholder' | translate}}"
+                   [formControl]="subjectsControl">
+        </clr-input-container>
+    </form>
+
+    <clr-datagrid [clrDgLoading]="dataSource.loading$ | async">
+        <clr-dg-placeholder>We couldn't find any books!</clr-dg-placeholder>
+        <clr-dg-column>
+            <ng-container>
+                {{ 'Thumbnail' | translate }}
+            </ng-container>
+        </clr-dg-column>
+
+        <clr-dg-column>
+            <ng-container *clrDgHideableColumn="{hidden: false}">
+                {{ 'Title' | translate }}
+            </ng-container>
+        </clr-dg-column>
+
+        <clr-dg-column>
+            <ng-container *clrDgHideableColumn="{hidden: false}">
+                {{ 'Publish Date' | translate }}
+            </ng-container>
+        </clr-dg-column>
+
+        <clr-dg-column>
+            <ng-container *clrDgHideableColumn="{hidden: false}">
+                {{ 'Authors' | translate }}
+            </ng-container>
+        </clr-dg-column>
+
+        <clr-dg-column>
+            <ng-container *clrDgHideableColumn="{hidden: false}">
+                {{ 'Publishers' | translate }}
+            </ng-container>
+        </clr-dg-column>
+
+        <clr-dg-column>
+            <ng-container *clrDgHideableColumn="{hidden: false}">
+                {{ 'Subjects' | translate }}
+            </ng-container>
+        </clr-dg-column>
+
+
+        <clr-dg-row
+                *clrDgItems="let work of dataSource.works$ | async"
+                [clrDgItem]="work">
+            <clr-dg-cell class="searchResultItem">
+                <a [routerLink]="['/book']" [queryParams]="{id: work.key | getolid}" routerLinkActive="active" class="bookcover">
+                    <img [src]="work.key | getolid | olcoverurl" alt="{{work.title}}">
+                </a>
+            </clr-dg-cell>
+            <clr-dg-cell>{{work.title}}</clr-dg-cell>
+            <clr-dg-cell>{{work.firstPublishYear}}</clr-dg-cell>
+            <clr-dg-cell>
+                <app-read-more
+                        text="{{(work.authorName || []).join(',')}}"
+                        [maxLength]="100"></app-read-more>
+
+            </clr-dg-cell>
+            <clr-dg-cell>
+                <app-read-more
+                        text="{{(work.publisher || []).join(',')}}"
+                        [maxLength]="100"></app-read-more>
+            </clr-dg-cell>
+            <clr-dg-cell>
+                <app-read-more
+                        text="{{(work.subject || []).join(',')}}"
+                        [maxLength]="100"></app-read-more>
+            </clr-dg-cell>
+        </clr-dg-row>
+
+        <clr-dg-footer class="height-auto">
+            <!-- Optional customization of hide/show columns toggle -->
+            <clr-dg-column-toggle>
+                <clr-dg-column-toggle-title>{{ 'Columns' | translate }}</clr-dg-column-toggle-title>
+                <clr-dg-column-toggle-button>{{ 'All' | translate }}</clr-dg-column-toggle-button>
+            </clr-dg-column-toggle>
+
+            <mat-paginator #paginator
+                           [length]="dataSource.total$ | async"
+                           [pageSize]="dataSource.currentFilter.limit"
+                           [pageSizeOptions]="[1, 10,20,30,40]">
+            </mat-paginator>
+        </clr-dg-footer>
+    </clr-datagrid>
+</div>

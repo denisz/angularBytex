@@ -1,0 +1,21 @@
+.card-media-image {
+    height: auto;
+    width: auto;
+    min-width: 180px;
+    min-height: 284px;
+    max-height: 20rem;
+    max-width: 20rem;
+}
+
+.loading {
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+
+.chip-list {
+    width: 100%;
+}

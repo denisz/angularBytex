@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import {ENTER} from '@angular/cdk/keycodes';
 import {Edition, WorkDetail} from '../../services/providers/model/models';
 import {ApiService} from '../../services/providers/api/api.service';
 import {ActivatedRoute} from '@angular/router';
@@ -19,7 +19,7 @@ export class BookDetailComponent {
 
     public localEntry: ChannelsEntry;
 
-    readonly separatorKeysCodes: number[] = [ENTER, COMMA];
+    readonly separatorKeysCodes: number[] = [ENTER];
 
     constructor(
         private apiGateway: ApiService,

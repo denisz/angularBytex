@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
-import Dexie from 'dexie';
 import {BehaviorSubject} from 'rxjs';
-
+import {NgForage, NgForageOptions, Driver} from 'ngforage';
 
 export interface ChannelsEntry {
     tags$: BehaviorSubject<string[]>;
@@ -21,23 +20,16 @@ export interface Entry {
     providedIn: 'root'
 })
 export class DataService {
-    private db: Dexie;
+    constructor(public readonly ngf: NgForage) {
 
-    private entries: Dexie.Table<Entry, string>;
-
-    constructor() {
-        this.db = new Dexie('openLibrary');
-        this.db.version(1)
-            .stores({
-                entries: 'key, *tags',
-            });
-
-        this.db.open()
-            .catch(err => {
-                console.error(`Open failed: ${err.stack}`);
-            });
-
-        this.entries = this.db.table('entries');
+        const opts: NgForageOptions = {
+            driver: Driver.LOCAL_STORAGE,
+            size: 4980736,
+            version: 1,
+            name: 'openBook',
+            storeName: 'op'
+        };
+        this.ngf.configure(opts);
     }
 
     async getChannelsForEntry(entry: Entry): Promise<ChannelsEntry> {
@@ -47,7 +39,7 @@ export class DataService {
         const saveTag = async (): Promise<Entry> => {
             entry.tags = Array.from(setTags);
             try {
-                await this.entries.put(entry);
+                await this.ngf.setItem(entry.key, entry);
                 tags$.next(entry.tags);
             } catch (e) {
 
@@ -72,30 +64,44 @@ export class DataService {
     }
 
     async selectOrCreateEntry(prototype: Entry, key: string): Promise<Entry> {
-        let entry = await this.entries.get(key);
+        let entry = await this.ngf.getItem<Entry>(key);
         if (!entry) {
-            await this.entries.add({...prototype, key});
-            entry = await this.entries.get(key);
+            await this.ngf.setItem(key, {...prototype, key});
+            entry = await this.ngf.getItem<Entry>(key);
         }
         return entry;
     }
 
     async getAllTags(): Promise<Set<string>> {
         const tags = new Set<string>();
-        await this.entries.each((obj) => {
-            obj.tags.forEach((v) => {
-                tags.add(v);
+
+        try {
+            await this.ngf.iterate((obj: Entry, key: string, idx: number): void => {
+                obj.tags.forEach((v) => {
+                    tags.add(v);
+                });
             });
-        });
+        } catch (e) {
+            console.error(e);
+        }
 
         return tags;
     }
 
     async getEntryByTags(tags: string[]): Promise<Entry[]> {
-        if (tags.length === 0) {
-            return this.entries.toArray();
+        const result: Entry[] = [];
+
+        try {
+            await this.ngf.iterate((obj: Entry, key: string, idx: number): void => {
+                if (obj.tags.some((v) => tags.includes(v))) {
+                    result.push(obj);
+                }
+            });
+        } catch (e) {
+            console.error(e);
         }
 
-        return this.entries.where('tags').anyOf(tags).toArray();
+
+        return result;
     }
 }

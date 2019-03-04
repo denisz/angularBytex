@@ -27,5 +27,8 @@
   "Description": "Описание",
   "Loading": "Загрузка",
   "Tags": "Теги",
-  "New tag": "Новый тег"
+  "New tag": "Новый тег",
+  "ItemsPerPage": "Элементов на странице",
+  "NextPage": "След. страница",
+  "PreviousPage": "Пред. страница"
 }

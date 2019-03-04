@@ -17,9 +17,10 @@ export class FavoritesComponent implements OnInit {
     public selectedTags = new FormControl();
 
     constructor(private dataGateway: DataService) {
-        this.selectedTags.valueChanges.subscribe(async () => {
-            await this.filter();
-        });
+    }
+
+    onSelectedTagsChange() {
+        this.filter().then(() => {});
     }
 
     async ngOnInit() {

@@ -1,15 +1,16 @@
 <div *ngIf="initloading" class="loading">
-        <span class="spinner spinner-inline">
-            Loading...
-        </span>
-    <span>&nbsp;
-            {{'Loading' | translate}}...
-        </span>
+    <span class="spinner spinner-inline">
+        Loading...
+    </span>
+    <span>&nbsp;{{'Loading' | translate}}...</span>
 </div>
 
 <div class="fav-wrapper" *ngIf="!initloading">
     <mat-form-field>
-        <mat-select [formControl]="selectedTags" multiple>
+        <mat-select
+                [formControl]="selectedTags"
+                (selectionChange)="onSelectedTagsChange($event)"
+                multiple>
             <mat-option *ngFor="let t of tags$ | async" [value]="t">{{t}}</mat-option>
         </mat-select>
     </mat-form-field>

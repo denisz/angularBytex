@@ -94,6 +94,7 @@
             </clr-dg-column-toggle>
 
             <mat-paginator #paginator
+                           (page)="onPageChanged($event)"
                            [length]="dataSource.total$ | async"
                            [pageSize]="dataSource.currentFilter.limit"
                            [pageSizeOptions]="[1, 10,20,30,40]">

@@ -27,5 +27,9 @@
   "Description": "Description",
   "Loading": "Loading",
   "Tags": "Tags",
-  "New tag": "New tag"
+  "New tag": "New tag",
+  "ItemsPerPage": "Items per page",
+  "NextPage": "Next page",
+  "PreviousPage": "Previous page"
+
 }

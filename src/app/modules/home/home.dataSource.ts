@@ -14,17 +14,10 @@ export class DatagridState implements PaginationParameters, FilterParameters {
     page: number;
 }
 
-export interface DataSourceInterface {
-    connect(): {
-        items: Observable<Work[]>,
-        total: Observable<number>,
-    };
-}
-
 @Injectable({
     providedIn: 'root'
 })
-export class HomeDataSource implements DataSourceInterface {
+export class HomeDataSource {
     public readonly loading$ = new BehaviorSubject<boolean>(false);
     public readonly total$: Observable<number>;
     public readonly works$: Observable<Work[]>;
@@ -55,16 +48,6 @@ export class HomeDataSource implements DataSourceInterface {
                 this.currentFilter = {...this.currentFilter, ...newState};
                 await this.beginBatchFetchWithFilterAndPagination(this.currentFilter, this.currentFilter);
             });
-    }
-
-    connect(): {
-        items: Observable<Work[]>,
-        total: Observable<number>,
-    } {
-        return {
-            items: this.works$,
-            total: this.total$,
-        };
     }
 
     async beginBatchFetchWithFilterAndPagination(filter: FilterParameters, pagination: PaginationParameters) {

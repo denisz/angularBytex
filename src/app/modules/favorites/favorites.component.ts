@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {ClrDatagridStateInterface} from '@clr/angular';
 import {DataService, Entry} from '../../services/data.service';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject} from 'rxjs';
 import {FormControl} from '@angular/forms';
 
 @Component({
@@ -19,13 +18,11 @@ export class FavoritesComponent implements OnInit {
 
     constructor(private dataGateway: DataService) {
         this.selectedTags.valueChanges.subscribe(async () => {
-            console.log(this.selectedTags);
             await this.filter();
         });
     }
 
     async ngOnInit() {
-        console.log('init');
         this.initloading = true;
         try {
             const tags = await this.dataGateway.getAllTags();
@@ -42,9 +39,7 @@ export class FavoritesComponent implements OnInit {
         this.loading = true;
         try {
             const tags = this.selectedTags.value;
-            console.log(tags);
             const entries = await this.dataGateway.getEntryByTags(tags);
-            console.log(entries);
             this.entries$.next(entries);
         } catch (e) {
             console.error(e);

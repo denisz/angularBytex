@@ -3,19 +3,12 @@ import {ReadMoreComponent} from '../../../components/readmore/readmore.component
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ClarityModule} from '@clr/angular';
 import {
-    MatTableModule,
     MatPaginatorModule,
-    MatProgressSpinnerModule,
     MatInputModule,
     MatSelectModule,
-    MatToolbarModule,
-    MatCardModule,
     MatFormFieldModule,
     MatIconModule,
-    MatButtonModule,
-    MatSidenavModule,
-    MatChipsModule,
-    MatListModule,
+    MatChipsModule
 } from '@angular/material';
 
 @NgModule({

@@ -74,7 +74,7 @@ export class DataService {
     async selectOrCreateEntry(prototype: Entry, key: string): Promise<Entry> {
         let entry = await this.entries.get(key);
         if (!entry) {
-            await this.entries.add({key, ...prototype});
+            await this.entries.add({...prototype, key});
             entry = await this.entries.get(key);
         }
         return entry;

@@ -30,17 +30,12 @@ export class BookDetailComponent {
             this.loading = true;
             try {
                 const olid = params.id;
-                console.log('loading: ', olid);
 
                 const jsonWork = await this.apiGateway.workByIdJsonGet(olid).toPromise();
                 this.work = new WorkDetail(jsonWork);
 
-                console.log('Work: ', jsonWork, this.work);
-
                 const jsonEditions = await this.apiGateway.editionsByWorkIdJsonGet(olid).toPromise();
                 this.editions = jsonEditions.entries.map(v => new Edition(v));
-
-                console.log('Editions:', jsonEditions, this.editions);
 
                 const {title, subjects, key, firstPublishDate} = this.work;
                 const localEntry = await this.dataGateway.selectOrCreateEntry(
@@ -49,7 +44,6 @@ export class BookDetailComponent {
                 );
 
                 this.localEntry = await this.dataGateway.getChannelsForEntry(localEntry);
-                console.log('LocalEntry:', this.localEntry);
             } catch (err) {
                 console.error(err);
                 this.error = err;

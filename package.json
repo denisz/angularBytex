@@ -28,7 +28,7 @@
     "@ngx-translate/http-loader": "^4.0.0",
     "@webcomponents/custom-elements": "^1.0.0",
     "core-js": "^2.5.4",
-    "dexie": "^2.0.4",
+    "dexie": "^3.2.2",
     "dexie-relationships": "^1.2.10",
     "hammerjs": "^2.0.8",
     "humps": "^2.0.1",
